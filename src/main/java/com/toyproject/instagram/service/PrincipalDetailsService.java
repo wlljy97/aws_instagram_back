@@ -19,24 +19,23 @@ public class PrincipalDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String phoneOrEmailOrUsername) throws UsernameNotFoundException {
         System.out.println("아이디 넘오옴?" + phoneOrEmailOrUsername);
-        User user = userMapper.findUserByPhone(phoneOrEmailOrUsername);
 
+        User user = userMapper.findUserByPhone(phoneOrEmailOrUsername);
         // 전화 번호로 사용자를 찾아보려고 시도합니다.
-        user = userMapper.findUserByPhone(phoneOrEmailOrUsername);
 
         // 주어진 전화 번호와 일치하는 사용자를 찾은 경우, 전화번호와 암호로 PrincipalUser 객체를 생성합니다.
         if (user != null) {
-            return new PrincipalUser(user.getPhone(), user.getPassword());
+            return new PrincipalUser(user.getPhone(), user.getPassword(), user.getAuthorities());
 
         }
         user = userMapper.findUserByEmail(phoneOrEmailOrUsername);
         if (user != null) {
-            return new PrincipalUser(user.getEmail(), user.getPassword());
+            return new PrincipalUser(user.getEmail(), user.getPassword(), user.getAuthorities());
         }
 
         user = userMapper.findUserByUsername(phoneOrEmailOrUsername);
         if (user != null) {
-            return new PrincipalUser(user.getUsername(), user.getPassword());
+            return new PrincipalUser(user.getUsername(), user.getPassword(), user.getAuthorities());
         }
 
         // 제공된 식별자와 일치하는 사용자가 없는 경우, 예외를 throw합니다

@@ -1,11 +1,11 @@
 package com.toyproject.instagram.controller;
 
+import com.toyproject.instagram.exception.JwtException;
 import com.toyproject.instagram.exception.SignupException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-import java.security.SignatureException;
 
 @RestControllerAdvice
 public class ExceptionController {
@@ -13,9 +13,14 @@ public class ExceptionController {
     // spring framework 에서 예외처리 하는 방법
 
     // @ExceptionHandler 어노테이션을 사용하여 SignatureException 예외를 처리하는 메소드를 정의
-    @ExceptionHandler(SignatureException.class)
+    @ExceptionHandler(SignupException.class)
     public ResponseEntity<?> signupExceptionHandle(SignupException signupException) {
         return ResponseEntity.badRequest().body(signupException.getErrorMap());
+    }
+
+    @ExceptionHandler(JwtException.class)
+    public ResponseEntity<?> JwtExceptionHandle(JwtException jwtException) {
+        return ResponseEntity.badRequest().body(jwtException.getMessage());
     }
 }
 

@@ -40,10 +40,13 @@ public class AuthenticationController {
 
     @PostMapping("/login") // 로그인은 post요청 통해서 실행
     public ResponseEntity<?> signin(@RequestBody SigninReqDto signinReqDto) {
+        String accessToken = userService.signinUser(signinReqDto);
+        return ResponseEntity.ok().body(accessToken); // 정상적으로 로그인이 되면 200ok가 난다.
+    }
 
-        userService.signinUser(signinReqDto);
-
-        return ResponseEntity.ok(null);
+    @GetMapping("/authenticate")
+    public ResponseEntity<?> authenticate(@RequestHeader(value = "Authorization") String token) {
+        return ResponseEntity.ok(userService.authenticate(token)); // 예외를 잡아줌
     }
 }
 
